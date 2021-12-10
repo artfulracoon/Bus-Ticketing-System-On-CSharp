@@ -1,96 +1,171 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace Otobus_Biletleme_Sistemi
 {
     public partial class Form2 : Form
     {
+        Yolcu yolcu;
+        Yolcu yolcu2;
         Yolculuk yolculuk;
-
-        public Form2(Yolculuk yolculuk)
+        Yolculuk donus;
+        public Form2(Yolcu yolcu, Yolculuk yolculuk, Yolculuk donus, Yolcu yolcu2)
         {
             InitializeComponent();
 
+            this.yolcu = yolcu;
             this.yolculuk = yolculuk;
-            Label[] destinationLabels = { label1, label3, label5, label7, label9};
+            this.donus = donus;
+            this.yolcu2 = yolcu2;
 
-            foreach (Label label in destinationLabels)
+            label2.Text = "İsim: " + yolcu.Isim;
+            label3.Text = "Soyisim: " + yolcu.Soyisim;
+            label4.Text = "TC Kimlik: " + yolcu.Tc_kimlik;
+            label22.Text = "E-posta: " + yolcu.Eposta;
+            
+            label6.Text = "Sefer No: " + yolcu.Sefer_no;
+            label7.Text = "Bilet No: " + yolcu.Bilet_no;
+
+            label9.Text = "Nereden: " + yolculuk.Nereden;
+            label10.Text = "Nereye: " + yolculuk.Nereye;
+            label11.Text = "Tarih: " + yolculuk.Gidis_tarihi;
+            label12.Text = "Saat: " + yolculuk.Saat;
+            label13.Text = "Ücret: " + yolculuk.Ucret;
+            label14.Text = "Sefer No: " + yolculuk.Sefer_no;
+            label5.Text = "Koltuk No: " + yolcu.Koltuk_no.ToString();
+
+            if (donus != null) 
             {
-                label.Text = yolculuk.Nereden + "  <--->  " + yolculuk.Nereye;
+                label16.Text = "Nereden: " + donus.Nereden;
+                label17.Text = "Nereye: " + donus.Nereye;
+                label18.Text = "Tarih: " + donus.Gidis_tarihi;
+                label19.Text = "Saat: " + donus.Saat;
+                label20.Text = "Ücret: " + donus.Ucret;
+                label21.Text = "Sefer No: " + donus.Sefer_no;
+
+                label23.Text = "Koltuk No: " + yolcu2.Koltuk_no.ToString();
+                label24.Text = "Koltuk No: " + yolcu2.Bilet_no;
+
+                label15.Show();
+                label16.Show();
+                label17.Show();
+                label18.Show();
+                label19.Show();
+                label20.Show();
+                label21.Show();
+                label23.Show();
+                label24.Show();
             }
 
+        }
 
-            Label[] dateLabels = { label2, label4, label6, label8, label10 };
+        private void button1_Click(object sender, System.EventArgs e)
+        {
+            int check = 0;
 
-            if (yolculuk.Donus_tarihi == null)
-            {
-                foreach(Label label in dateLabels) 
+            string yolcu_if_not_exists_insert = "IF NOT EXISTS (SELECT * FROM Yolcu WHERE Bilet_No = @bilet) BEGIN INSERT INTO Yolcu VALUES (@isim,@soyisim,@tc,@eposta,@koltuk,@sefer,@bilet) END";
+
+            string sefer_if_not_exists_insert = "IF NOT EXISTS (SELECT * FROM Sefer WHERE Sefer_No = @sefer) BEGIN INSERT INTO Sefer VALUES (@nereden,@nereye,@tarih,@saat,@ucret,@sefer) END";
+
+            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + Application.StartupPath.Substring(0, Application.StartupPath.Length-9) + @"Database1.mdf;Integrated Security=True");
+
+            con.Open();
+            try {
+                using (SqlCommand cmd = new SqlCommand(sefer_if_not_exists_insert, con))
                 {
-                    label.Text = yolculuk.Gidis_tarihi;
+                    cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = yolculuk.Sefer_no;
+                    cmd.Parameters.Add("@nereden", SqlDbType.NVarChar).Value = yolculuk.Nereden;
+                    cmd.Parameters.Add("@nereye", SqlDbType.NVarChar).Value = yolculuk.Nereye;
+                    cmd.Parameters.Add("@tarih", SqlDbType.NVarChar).Value = yolculuk.Gidis_tarihi;
+                    cmd.Parameters.Add("@saat", SqlDbType.NVarChar).Value = yolculuk.Saat;
+                    cmd.Parameters.Add("@ucret", SqlDbType.NVarChar).Value = yolculuk.Ucret;
+
+                    int rowsAdded = cmd.ExecuteNonQuery();
                 }
-                
-            } else
-            {
-                foreach (Label label in dateLabels) 
+
+                if (donus != null)
                 {
-                    label.Text = yolculuk.Gidis_tarihi + "  <--->  " + yolculuk.Donus_tarihi;
+                    using (SqlCommand cmd = new SqlCommand(sefer_if_not_exists_insert, con))
+                    {
+                        cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = donus.Sefer_no;
+                        cmd.Parameters.Add("@nereden", SqlDbType.NVarChar).Value = donus.Nereden;
+                        cmd.Parameters.Add("@nereye", SqlDbType.NVarChar).Value = donus.Nereye;
+                        cmd.Parameters.Add("@tarih", SqlDbType.NVarChar).Value = donus.Gidis_tarihi;
+                        cmd.Parameters.Add("@saat", SqlDbType.NVarChar).Value = donus.Saat;
+                        cmd.Parameters.Add("@ucret", SqlDbType.NVarChar).Value = donus.Ucret;
+
+                        int rowsAdded = cmd.ExecuteNonQuery();
+                    }
                 }
-                
             }
-            Label[] timeLabels = { label11, label12, label13, label14, label15 };
-            String[] timeValues = {"09:00", "12:00", "15:00", "19:00", "23:30" };
-            int i = 0;
-            foreach (Label label in timeLabels) 
+            catch (SqlException) 
             {
-                label.Text = timeValues[i]; i++;
+                MessageBox.Show("Seferin veritabanına eklenmesinde hata oluştu!");
+                return;
             }
-        }
 
-        private void panel1_DoubleClick(object sender, EventArgs e)
-        {
-            this.Hide();
-            var form3 = new Form3(yolculuk, label16.Text);
-            form3.Closed += (s, args) => this.Close();
-            form3.Show();
-        }
+            try {
+                using (SqlCommand cmd = new SqlCommand(yolcu_if_not_exists_insert, con))
+                {
+                    cmd.Parameters.Add("@isim", SqlDbType.NVarChar).Value = yolcu.Isim;
+                    cmd.Parameters.Add("@soyisim", SqlDbType.NVarChar).Value = yolcu.Soyisim;
+                    cmd.Parameters.Add("@tc", SqlDbType.NVarChar).Value = yolcu.Tc_kimlik;
+                    cmd.Parameters.Add("@eposta", SqlDbType.NVarChar).Value = yolcu.Eposta;
+                    cmd.Parameters.Add("@koltuk", SqlDbType.NVarChar).Value = yolcu.Koltuk_no.ToString();
+                    cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = yolcu.Sefer_no;
+                    cmd.Parameters.Add("@bilet", SqlDbType.NVarChar).Value = yolcu.Bilet_no;
 
-        private void panel2_DoubleClick(object sender, EventArgs e)
-        {
-            this.Hide();
-            var form3 = new Form3(yolculuk, label17.Text);
-            form3.Closed += (s, args) => this.Close();
-            form3.Show();
-        }
+                    int rowsAdded = cmd.ExecuteNonQuery();
+                    if (rowsAdded <= 0)
+                    {
+                        MessageBox.Show("Yolcu işleme alınamadı!");
+                        check = 1;
+                    }
 
-        private void panel3_DoubleClick(object sender, EventArgs e)
-        {
-            this.Hide();
-            var form3 = new Form3(yolculuk, label18.Text);
-            form3.Closed += (s, args) => this.Close();
-            form3.Show();
-        }
+                }
 
-        private void panel4_DoubleClick(object sender, EventArgs e)
-        {
-            this.Hide();
-            var form3 = new Form3(yolculuk, label19.Text);
-            form3.Closed += (s, args) => this.Close();
-            form3.Show();
-        }
+                using (SqlCommand cmd = new SqlCommand(yolcu_if_not_exists_insert, con))
+                {
+                    if (yolcu2 != null)
+                    {
+                        cmd.Parameters.Add("@isim", SqlDbType.NVarChar).Value = yolcu2.Isim;
+                        cmd.Parameters.Add("@soyisim", SqlDbType.NVarChar).Value = yolcu2.Soyisim;
+                        cmd.Parameters.Add("@tc", SqlDbType.NVarChar).Value = yolcu2.Tc_kimlik;
+                        cmd.Parameters.Add("@eposta", SqlDbType.NVarChar).Value = yolcu2.Eposta;
+                        cmd.Parameters.Add("@koltuk", SqlDbType.NVarChar).Value = yolcu2.Koltuk_no.ToString();
+                        cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = yolcu2.Sefer_no;
+                        cmd.Parameters.Add("@bilet", SqlDbType.NVarChar).Value = yolcu2.Bilet_no;
 
-        private void panel5_DoubleClick(object sender, EventArgs e)
-        {
-            this.Hide();
-            var form3 = new Form3(yolculuk, label20.Text);
-            form3.Closed += (s, args) => this.Close();
-            form3.Show();
+                        int rowsAdded = cmd.ExecuteNonQuery();
+                        if (rowsAdded <= 0)
+                        {
+                            MessageBox.Show("Yolcu 2 işleme alınamadı!");
+                            check = 1;
+                        }
+                    }
+                }
+            } catch (SqlException)
+            {
+                MessageBox.Show("Seçtiğiniz koltuk halihazırda ayırtılmış durumdadır!\nLütfen farklı bir koltuk seçiniz.");
+                return;
+            }
+
+
+            if (check == 0)
+                {
+                    this.Hide();
+                    MessageBox.Show("Biletiniz işlenmiştir! İyi günler dileriz.");
+                    this.Close();
+                }
+                else
+                {
+                    this.Hide();
+                    MessageBox.Show("Biletiniz bir hata kaynaklı işleme alınmamıştır. Lütfen tekrar deneyiniz.");
+                    this.Close();
+                }
+
+            
         }
     }
 }
