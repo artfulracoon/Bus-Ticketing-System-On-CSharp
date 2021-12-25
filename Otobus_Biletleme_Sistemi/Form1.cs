@@ -59,12 +59,6 @@ namespace Otobus_Biletleme_Sistemi
                 comboBox2.GetItemText(comboBox2.SelectedItem),
                 monthCalendar1.SelectionRange.Start.ToString());
 
-            
-
-
-
-            
-
             showPart2(yolculuk);
         }
 
@@ -101,6 +95,7 @@ namespace Otobus_Biletleme_Sistemi
             {
                 showPart2(donus);
                 gidisDonus = 0;
+                ikinciSeferSecimi = 1;
                 label5.Text = "SEFER SEÇİMİ (DÖNÜŞ)";
                 label3.Text = "Koltuk Numarası (GİDİŞ)";
                 label31.Visible = true;
@@ -116,7 +111,7 @@ namespace Otobus_Biletleme_Sistemi
             sefer_no = (string)plaka[yolculuk.Nereden] + (string)plaka[yolculuk.Nereye] + yolculuk.Saat.Replace(":", "") +
                    yolculuk.Gidis_tarihi.Replace("/", "");
 
-            if(ikinciSeferSecimi == 1)
+            if (ikinciSeferSecimi == 1)
                 sefer_no2 = (string)plaka[donus.Nereden] + (string)plaka[donus.Nereye] + donus.Saat.Substring(0, 2) + donus.Saat.Substring(3, 2) +
                    donus.Gidis_tarihi.Substring(0, 2) + donus.Gidis_tarihi.Substring(3, 2) + donus.Gidis_tarihi.Substring(8, 2);
 
@@ -133,7 +128,7 @@ namespace Otobus_Biletleme_Sistemi
             {
                 yolculuk.Saat = label17.Text;
                 yolculuk.Ucret = label26.Text;
-                ikinciSeferSecimi = 1;
+                //ikinciSeferSecimi = 1;
             }
             else
             {
@@ -150,7 +145,7 @@ namespace Otobus_Biletleme_Sistemi
             {
                 yolculuk.Saat = label18.Text;
                 yolculuk.Ucret = label25.Text;
-                ikinciSeferSecimi = 1;
+                //ikinciSeferSecimi = 1;
             }
             else
             {
@@ -167,7 +162,7 @@ namespace Otobus_Biletleme_Sistemi
             {
                 yolculuk.Saat = label19.Text;
                 yolculuk.Ucret = label24.Text;
-                ikinciSeferSecimi = 1;
+                //ikinciSeferSecimi = 1;
             }
             else
             {
@@ -184,7 +179,7 @@ namespace Otobus_Biletleme_Sistemi
             {
                 yolculuk.Saat = label20.Text;
                 yolculuk.Ucret = label23.Text;
-                ikinciSeferSecimi = 1;
+                //ikinciSeferSecimi = 1;
             }
             else
             {
@@ -201,7 +196,7 @@ namespace Otobus_Biletleme_Sistemi
             {
                 yolculuk.Saat = label21.Text;
                 yolculuk.Ucret = label22.Text;
-                ikinciSeferSecimi = 1;
+                //ikinciSeferSecimi = 1;
             }
             else 
             {
