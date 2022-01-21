@@ -18,6 +18,7 @@ namespace Otobus_Biletleme_Sistemi
         Yolculuk donus;
         string sefer_no;
         string sefer_no2;
+        string path_to_db = (Application.StartupPath.Substring(0,Application.StartupPath.Length - 9) + @"Database1.mdf");
         public Form1()
         {
             
@@ -316,7 +317,9 @@ namespace Otobus_Biletleme_Sistemi
         decimal ikinci_koltuk_secimi = 0;
         private void button36_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + Application.StartupPath.Substring(0, Application.StartupPath.Length - 9) + @"Database1.mdf;Integrated Security=True");
+            
+            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + path_to_db + @";Integrated Security=True");
+
             string koltuk_check = "SELECT COUNT(*) FROM Yolcu WHERE (Koltuk_No = @koltuk AND Sefer_No = @sefer)";
             con.Open();
             try
@@ -345,11 +348,15 @@ namespace Otobus_Biletleme_Sistemi
             if (ikinciSeferSecimi == 1) { ikinci_koltuk_secimi = 1; }
             last_button.BackColor= Color.Orange;
             last_button = null;
+            button36.BackColor = Color.Orange;
         }
 
         private void button37_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + Application.StartupPath.Substring(0, Application.StartupPath.Length - 9) + @"Database1.mdf;Integrated Security=True");
+            
+
+            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + path_to_db + ";Integrated Security=True");
+
             string koltuk_check = "SELECT COUNT(*) FROM Yolcu WHERE (Koltuk_No = @koltuk AND Sefer_No = @sefer)";
             con.Open();
             try
@@ -376,6 +383,7 @@ namespace Otobus_Biletleme_Sistemi
 
 
             ikinci_koltuk = numericUpDown2.Value;
+            button37.BackColor = Color.Green;
         }
         private void numericUpDown1_Click(object sender, EventArgs e)
         {

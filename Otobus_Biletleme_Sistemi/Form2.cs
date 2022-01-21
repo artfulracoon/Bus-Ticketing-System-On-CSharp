@@ -10,6 +10,7 @@ namespace Otobus_Biletleme_Sistemi
         Yolcu yolcu2;
         Yolculuk yolculuk;
         Yolculuk donus;
+        string path_to_db = (Application.StartupPath.Substring(0,Application.StartupPath.Length - 9) + @"Database1.mdf");
         public Form2(Yolcu yolcu, Yolculuk yolculuk, Yolculuk donus, Yolcu yolcu2)
         {
             InitializeComponent();
@@ -68,18 +69,18 @@ namespace Otobus_Biletleme_Sistemi
 
             string sefer_if_not_exists_insert = "IF NOT EXISTS (SELECT * FROM Sefer WHERE Sefer_No = @sefer) BEGIN INSERT INTO Sefer VALUES (@nereden,@nereye,@tarih,@saat,@ucret,@sefer) END";
 
-            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + Application.StartupPath.Substring(0, Application.StartupPath.Length-9) + @"Database1.mdf;Integrated Security=True");
-
+            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + path_to_db + @";Integrated Security=True");
+            
             con.Open();
             try {
                 using (SqlCommand cmd = new SqlCommand(sefer_if_not_exists_insert, con))
                 {
-                    cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = yolculuk.Sefer_no;
-                    cmd.Parameters.Add("@nereden", SqlDbType.NVarChar).Value = yolculuk.Nereden;
-                    cmd.Parameters.Add("@nereye", SqlDbType.NVarChar).Value = yolculuk.Nereye;
-                    cmd.Parameters.Add("@tarih", SqlDbType.NVarChar).Value = yolculuk.Gidis_tarihi;
-                    cmd.Parameters.Add("@saat", SqlDbType.NVarChar).Value = yolculuk.Saat;
-                    cmd.Parameters.Add("@ucret", SqlDbType.NVarChar).Value = yolculuk.Ucret;
+                    cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = yolculuk.Sefer_no.Replace(" ", "");
+                    cmd.Parameters.Add("@nereden", SqlDbType.NVarChar).Value = yolculuk.Nereden.Replace(" ", "");
+                    cmd.Parameters.Add("@nereye", SqlDbType.NVarChar).Value = yolculuk.Nereye.Replace(" ", "");
+                    cmd.Parameters.Add("@tarih", SqlDbType.NVarChar).Value = yolculuk.Gidis_tarihi.Replace(" ", "");
+                    cmd.Parameters.Add("@saat", SqlDbType.NVarChar).Value = yolculuk.Saat.Replace(" ", "");
+                    cmd.Parameters.Add("@ucret", SqlDbType.NVarChar).Value = yolculuk.Ucret.Replace(" ", "");
 
                     int rowsAdded = cmd.ExecuteNonQuery();
                 }
@@ -88,12 +89,12 @@ namespace Otobus_Biletleme_Sistemi
                 {
                     using (SqlCommand cmd = new SqlCommand(sefer_if_not_exists_insert, con))
                     {
-                        cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = donus.Sefer_no;
-                        cmd.Parameters.Add("@nereden", SqlDbType.NVarChar).Value = donus.Nereden;
-                        cmd.Parameters.Add("@nereye", SqlDbType.NVarChar).Value = donus.Nereye;
-                        cmd.Parameters.Add("@tarih", SqlDbType.NVarChar).Value = donus.Gidis_tarihi;
-                        cmd.Parameters.Add("@saat", SqlDbType.NVarChar).Value = donus.Saat;
-                        cmd.Parameters.Add("@ucret", SqlDbType.NVarChar).Value = donus.Ucret;
+                        cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = donus.Sefer_no.Replace(" ", "");
+                        cmd.Parameters.Add("@nereden", SqlDbType.NVarChar).Value = donus.Nereden.Replace(" ", "");
+                        cmd.Parameters.Add("@nereye", SqlDbType.NVarChar).Value = donus.Nereye.Replace(" ", "");
+                        cmd.Parameters.Add("@tarih", SqlDbType.NVarChar).Value = donus.Gidis_tarihi.Replace(" ", "");
+                        cmd.Parameters.Add("@saat", SqlDbType.NVarChar).Value = donus.Saat.Replace(" ", "");
+                        cmd.Parameters.Add("@ucret", SqlDbType.NVarChar).Value = donus.Ucret.Replace(" ", "");
 
                         int rowsAdded = cmd.ExecuteNonQuery();
                     }
@@ -108,13 +109,13 @@ namespace Otobus_Biletleme_Sistemi
             try {
                 using (SqlCommand cmd = new SqlCommand(yolcu_if_not_exists_insert, con))
                 {
-                    cmd.Parameters.Add("@isim", SqlDbType.NVarChar).Value = yolcu.Isim;
-                    cmd.Parameters.Add("@soyisim", SqlDbType.NVarChar).Value = yolcu.Soyisim;
-                    cmd.Parameters.Add("@tc", SqlDbType.NVarChar).Value = yolcu.Tc_kimlik;
-                    cmd.Parameters.Add("@eposta", SqlDbType.NVarChar).Value = yolcu.Eposta;
-                    cmd.Parameters.Add("@koltuk", SqlDbType.NVarChar).Value = yolcu.Koltuk_no.ToString();
-                    cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = yolcu.Sefer_no;
-                    cmd.Parameters.Add("@bilet", SqlDbType.NVarChar).Value = yolcu.Bilet_no;
+                    cmd.Parameters.Add("@isim", SqlDbType.NVarChar).Value = yolcu.Isim.Replace(" ", "");
+                    cmd.Parameters.Add("@soyisim", SqlDbType.NVarChar).Value = yolcu.Soyisim.Replace(" ", "");
+                    cmd.Parameters.Add("@tc", SqlDbType.NVarChar).Value = yolcu.Tc_kimlik.Replace(" ", "");
+                    cmd.Parameters.Add("@eposta", SqlDbType.NVarChar).Value = yolcu.Eposta.Replace(" ", "");
+                    cmd.Parameters.Add("@koltuk", SqlDbType.NVarChar).Value = yolcu.Koltuk_no.ToString().Replace(" ", "");
+                    cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = yolcu.Sefer_no.Replace(" ", "");
+                    cmd.Parameters.Add("@bilet", SqlDbType.NVarChar).Value = yolcu.Bilet_no.Replace(" ", "");
 
                     int rowsAdded = cmd.ExecuteNonQuery();
                     if (rowsAdded <= 0)
@@ -129,13 +130,13 @@ namespace Otobus_Biletleme_Sistemi
                 {
                     if (yolcu2 != null)
                     {
-                        cmd.Parameters.Add("@isim", SqlDbType.NVarChar).Value = yolcu2.Isim;
-                        cmd.Parameters.Add("@soyisim", SqlDbType.NVarChar).Value = yolcu2.Soyisim;
-                        cmd.Parameters.Add("@tc", SqlDbType.NVarChar).Value = yolcu2.Tc_kimlik;
-                        cmd.Parameters.Add("@eposta", SqlDbType.NVarChar).Value = yolcu2.Eposta;
-                        cmd.Parameters.Add("@koltuk", SqlDbType.NVarChar).Value = yolcu2.Koltuk_no.ToString();
-                        cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = yolcu2.Sefer_no;
-                        cmd.Parameters.Add("@bilet", SqlDbType.NVarChar).Value = yolcu2.Bilet_no;
+                        cmd.Parameters.Add("@isim", SqlDbType.NVarChar).Value = yolcu2.Isim.Replace(" ", "");
+                        cmd.Parameters.Add("@soyisim", SqlDbType.NVarChar).Value = yolcu2.Soyisim.Replace(" ", "");
+                        cmd.Parameters.Add("@tc", SqlDbType.NVarChar).Value = yolcu2.Tc_kimlik.Replace(" ", "");
+                        cmd.Parameters.Add("@eposta", SqlDbType.NVarChar).Value = yolcu2.Eposta.Replace(" ", "");
+                        cmd.Parameters.Add("@koltuk", SqlDbType.NVarChar).Value = yolcu2.Koltuk_no.ToString().Replace(" ", "");
+                        cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = yolcu2.Sefer_no.Replace(" ", "");
+                        cmd.Parameters.Add("@bilet", SqlDbType.NVarChar).Value = yolcu2.Bilet_no.Replace(" ", "");
 
                         int rowsAdded = cmd.ExecuteNonQuery();
                         if (rowsAdded <= 0)
