@@ -13,7 +13,16 @@ namespace Otobus_Biletleme_Sistemi
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form3());
+
+            bool KeepRunning = true;
+
+            while (KeepRunning)
+            {
+                Application.Run(new Form3());
+                var result = MessageBox.Show("Programı tamamen kapatmak için evet, ana menüye dönmek için hayırı seçiniz.", "UYARI!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                    KeepRunning = false;
+            }
         }
     }
 }

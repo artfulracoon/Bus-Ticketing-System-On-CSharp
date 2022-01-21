@@ -53,6 +53,8 @@ namespace Otobus_Biletleme_Sistemi
                 pictureBox1.Size = new System.Drawing.Size(150, 150);
             }
 
+            panel2.Visible = false;
+
             textBox1.Visible = false;
             button4.Visible = false;
             label4.Visible = false;
@@ -82,7 +84,7 @@ namespace Otobus_Biletleme_Sistemi
                     reader.Close();
                 }
             }
-            catch (SqlException)
+            catch (Exception)
             {
                 MessageBox.Show("Aradığınız PNR kayıtlarda bulunamamıştır!");
                 con.Close();
@@ -117,11 +119,46 @@ namespace Otobus_Biletleme_Sistemi
                     sb.AppendFormat(format, "", "");
                     for (int ctr = 0; ctr < columns.Length; ctr++)
                         sb.AppendFormat(format, columns[ctr], data[ctr]);
-                
-
-                    MessageBox.Show(sb.ToString());
 
                     reader.Close();
+
+                    var result = MessageBox.Show(sb.ToString(),"Bilet üzerinde değişiklik yapmak istiyor musunuz?",MessageBoxButtons.YesNo,
+                                 MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                        {
+                        using (SqlCommand cmd2 = new SqlCommand("SELECT * FROM Yolcu WHERE Sefer_No = @sefer_no", con))
+                        {
+                            cmd2.Parameters.Add("@sefer_no", SqlDbType.NVarChar).Value = bilet_no;
+                            SqlDataReader reader2 = cmd2.ExecuteReader();
+
+                            string[] data2 = new string[7];
+
+                            while (reader2.Read())
+                            {
+
+                                for (int i = 0; i < reader2.FieldCount; i++)
+                                {
+                                    data2[i] = reader2.GetString(i).Replace(" ", "");
+                                }
+                            }
+
+                            label4.Visible = false; 
+                            textBox1.Visible = false;
+                            panel2.Visible = true;
+
+                            textBox4.Text = data2[0];
+                            textBox5.Text = data2[1];
+                            textBox6.Text = data2[2];
+                            textBox7.Text = data2[3];
+                            textBox8.Text = data2[4];
+                            label11.Text = data2[5];
+                            label12.Text = data2[6];
+
+                            reader2.Close();
+                        }
+                    }
+  
                     con.Close();
                 }
                     
@@ -160,12 +197,67 @@ namespace Otobus_Biletleme_Sistemi
 
                     }
                 }
-                
-
             }
             MessageBox.Show("Girdiğiniz kullanıcı adı ve şifre ile eşleşen bir kayıt yoktur!");
-
         }
 
+        private void button6_Click(object sender, EventArgs e)
+        {
+            con.Open();
+            SqlCommand cmd = new SqlCommand("UPDATE Yolcu SET Isim=@isim,Soyisim=@soyisim,TC_Kimlik=@tc,Eposta=@eposta,Koltuk_No=@koltuk,Sefer_No=@sefer WHERE Bilet_No=@bilet", con);
+
+            try
+            {
+                using (cmd)
+                {
+                    cmd.Parameters.Add("@isim", SqlDbType.NVarChar).Value = textBox4.Text.Replace(" ", "");
+                    cmd.Parameters.Add("@soyisim", SqlDbType.NVarChar).Value = textBox5.Text.Replace(" ", "");
+                    cmd.Parameters.Add("@tc", SqlDbType.NVarChar).Value = textBox6.Text.Replace(" ", "");
+                    cmd.Parameters.Add("@eposta", SqlDbType.NVarChar).Value = textBox7.Text.Replace(" ", "");
+                    cmd.Parameters.Add("@koltuk", SqlDbType.NVarChar).Value = textBox8.Text.Replace(" ", "");
+                    cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = label11.Text.Replace(" ", "");
+                    cmd.Parameters.Add("@bilet", SqlDbType.NVarChar).Value = textBox1.Text;
+
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Yolcu verileri başarıyla değiştirildi!");
+                    con.Close();
+
+                }
+            }
+            catch (SqlException)
+            {
+                MessageBox.Show("Değiştirilme sırasında hata oluştu!");
+                con.Close();
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DELETE Yolcu WHERE Bilet_No=@bilet", con);
+            try
+            {
+                using (cmd)
+                {
+                    cmd.Parameters.Add("@bilet", SqlDbType.NVarChar).Value = textBox1.Text;
+
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Yolcu verileri başarıyla silindi!");
+                    con.Close();
+
+                }
+            }
+            catch (SqlException)
+            {
+                MessageBox.Show("Silinmede hata oluştu!");
+                con.Close();
+            }
+        }
+
+        private void Form3_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            
+        }
     }
 }
+
