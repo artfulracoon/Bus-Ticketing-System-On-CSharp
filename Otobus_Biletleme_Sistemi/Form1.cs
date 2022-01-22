@@ -189,7 +189,6 @@ namespace Otobus_Biletleme_Sistemi
             {
                 yolculuk.Saat = label17.Text;
                 yolculuk.Ucret = label26.Text;
-                //ikinciSeferSecimi = 1;
             }
             else
             {
@@ -206,7 +205,6 @@ namespace Otobus_Biletleme_Sistemi
             {
                 yolculuk.Saat = label18.Text;
                 yolculuk.Ucret = label25.Text;
-                //ikinciSeferSecimi = 1;
             }
             else
             {
@@ -223,7 +221,6 @@ namespace Otobus_Biletleme_Sistemi
             {
                 yolculuk.Saat = label19.Text;
                 yolculuk.Ucret = label24.Text;
-                //ikinciSeferSecimi = 1;
             }
             else
             {
@@ -240,7 +237,6 @@ namespace Otobus_Biletleme_Sistemi
             {
                 yolculuk.Saat = label20.Text;
                 yolculuk.Ucret = label23.Text;
-                //ikinciSeferSecimi = 1;
             }
             else
             {
@@ -257,7 +253,6 @@ namespace Otobus_Biletleme_Sistemi
             {
                 yolculuk.Saat = label21.Text;
                 yolculuk.Ucret = label22.Text;
-                //ikinciSeferSecimi = 1;
             }
             else 
             {
@@ -353,7 +348,6 @@ namespace Otobus_Biletleme_Sistemi
         {
             Button buton = (Button)sender;
             if (last_button == null) { }
-            else if (ilk_koltuk.ToString() == last_button.Text) { last_button.BackColor = Color.Orange; }
             else { last_button.BackColor = Color.White; }
             
             last_button = buton;
@@ -410,14 +404,15 @@ namespace Otobus_Biletleme_Sistemi
             last_button.BackColor= Color.Orange;
             last_button = null;
             button36.BackColor = Color.Orange;
-            button36.Enabled = false;
-            numericUpDown1.Enabled = false;
-            numericUpDown2.Enabled = true;
-            button37.Enabled = true;
-            label32.Text = "DÖNÜŞ";
-            label34.Text = numericUpDown1.Value.ToString();
+
             if (ikinciSeferSecimi==1)
             {
+                button36.Enabled = false;
+                numericUpDown1.Enabled = false;
+                numericUpDown2.Enabled = true;
+                button37.Enabled = true;
+                label32.Text = "DÖNÜŞ";
+                label34.Text = numericUpDown1.Value.ToString();
                 clearSeats();
                 checkSeats(sefer_no2);
             }
@@ -493,6 +488,8 @@ namespace Otobus_Biletleme_Sistemi
         {
             clearSeats();
             checkSeats(sefer_no);
+            last_button = null;
+            ikinci_koltuk_secimi = 0;
             button36.Enabled = true;
             numericUpDown1.Enabled = true;
             numericUpDown2.Enabled = false;
