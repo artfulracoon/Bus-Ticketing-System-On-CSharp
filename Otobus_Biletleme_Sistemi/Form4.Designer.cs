@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form4));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.button3 = new System.Windows.Forms.Button();
@@ -119,7 +120,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(169, 70);
             this.button3.TabIndex = 18;
-            this.button3.Text = "DELETE";
+            this.button3.Text = "SİL";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -130,7 +131,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(169, 70);
             this.button2.TabIndex = 17;
-            this.button2.Text = "UPDATE";
+            this.button2.Text = "GÜNCELLE";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -141,27 +142,27 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(169, 70);
             this.button1.TabIndex = 16;
-            this.button1.Text = "INSERT";
+            this.button1.Text = "EKLE";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(652, 186);
+            this.textBox7.Location = new System.Drawing.Point(653, 220);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(315, 26);
             this.textBox7.TabIndex = 15;
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(652, 127);
+            this.textBox6.Location = new System.Drawing.Point(653, 161);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(315, 26);
             this.textBox6.TabIndex = 14;
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(652, 69);
+            this.textBox5.Location = new System.Drawing.Point(653, 103);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(315, 26);
             this.textBox5.TabIndex = 13;
@@ -199,7 +200,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label7.Location = new System.Drawing.Point(544, 186);
+            this.label7.Location = new System.Drawing.Point(545, 220);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(79, 25);
             this.label7.TabIndex = 8;
@@ -210,7 +211,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label6.Location = new System.Drawing.Point(544, 127);
+            this.label6.Location = new System.Drawing.Point(545, 161);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(89, 25);
             this.label6.TabIndex = 7;
@@ -221,7 +222,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label5.Location = new System.Drawing.Point(544, 69);
+            this.label5.Location = new System.Drawing.Point(545, 103);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(97, 25);
             this.label5.TabIndex = 6;
@@ -316,7 +317,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(169, 70);
             this.button4.TabIndex = 31;
-            this.button4.Text = "DELETE";
+            this.button4.Text = "SİL";
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -327,7 +328,7 @@
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(169, 70);
             this.button5.TabIndex = 30;
-            this.button5.Text = "UPDATE";
+            this.button5.Text = "GÜNCELLE";
             this.button5.UseVisualStyleBackColor = false;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
@@ -338,7 +339,7 @@
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(169, 70);
             this.button6.TabIndex = 29;
-            this.button6.Text = "INSERT";
+            this.button6.Text = "EKLE";
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
@@ -468,8 +469,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1341, 767);
             this.Controls.Add(this.tabControl1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form4";
-            this.Text = "ADMIN PANEL";
+            this.Text = "ADMİN PANELİ";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();

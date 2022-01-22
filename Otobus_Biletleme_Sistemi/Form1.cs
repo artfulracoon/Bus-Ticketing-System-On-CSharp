@@ -18,7 +18,7 @@ namespace Otobus_Biletleme_Sistemi
         Yolculuk donus;
         string sefer_no;
         string sefer_no2;
-        string path_to_db = (Application.StartupPath.Substring(0,Application.StartupPath.Length - 9) + @"Database1.mdf");
+        SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + (Application.StartupPath.Substring(0, Application.StartupPath.Length - 9) + @"Database1.mdf") + @";Integrated Security=True");
         public Form1()
         {
             
@@ -102,6 +102,7 @@ namespace Otobus_Biletleme_Sistemi
                 label31.Visible = true;
                 button37.Visible = true;
                 numericUpDown2.Visible = true;
+                label32.Visible = true;
                 return;
             }
 
@@ -116,10 +117,69 @@ namespace Otobus_Biletleme_Sistemi
                 sefer_no2 = (string)plaka[donus.Nereden] + (string)plaka[donus.Nereye] + donus.Saat.Substring(0, 2) + donus.Saat.Substring(3, 2) +
                    donus.Gidis_tarihi.Substring(0, 2) + donus.Gidis_tarihi.Substring(3, 2) + donus.Gidis_tarihi.Substring(8, 2);
 
+            checkSeats(sefer_no);
             panel6.Visible = false;
             panel12.Visible = true;
             panel4.BackColor = Color.FromArgb(51, 51, 76);
             panel5.BackColor = Color.FromArgb(41, 41, 61);
+        }
+
+        private void checkSeats(string sefer_noo)
+        {
+            string koltuk_check2 = "SELECT COUNT(*) FROM Yolcu WHERE (Koltuk_No = @koltuk AND Sefer_No = @sefer)";
+            con.Open();
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand(koltuk_check2, con))
+                {
+                    int current_koltuk;
+                    int koltuk_dolu;
+
+                    int[] koltuk_sayilari = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 };
+
+                    Button[] koltuklar = { button8, button9, button10, button11, button12, button13, button14, button15, button16,
+                        button17, button18, button19,button20, button21, button22, button23, button24, button25, button26, button27, button28,
+                        button29, button30, button31, button32, button33, button34, button35, button38, button39, button42, button43 };
+
+
+                    for (int i = 0; i < koltuklar.Length; i++)
+                    {
+                        cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = sefer_noo.Replace(" ", "");
+                        current_koltuk = koltuk_sayilari[i];
+                        cmd.Parameters.Add("@koltuk", SqlDbType.NVarChar).Value = current_koltuk;
+                        koltuk_dolu = (int)cmd.ExecuteScalar();
+
+                        if (koltuk_dolu > 0)
+                        {
+                            koltuklar[i].BackColor = Color.FromArgb(178, 34, 34);
+                            koltuklar[i].Enabled = false;
+                        }
+                        cmd.Parameters.Clear();
+                    }
+
+                }
+            }
+            catch (SqlException)
+            {
+                MessageBox.Show("İlk koltuk seçiminde SQL Exception Hatası!");
+                con.Close();
+                return;
+            }
+            con.Close();
+        }
+
+        private void clearSeats()
+        {
+                    Button[] koltuklar = { button8, button9, button10, button11, button12, button13, button14, button15, button16,
+                        button17, button18, button19,button20, button21, button22, button23, button24, button25, button26, button27, button28,
+                        button29, button30, button31, button32, button33, button34, button35, button38, button39, button42, button43 };
+
+
+                    for (int i = 0; i < koltuklar.Length; i++)
+                    {
+                        koltuklar[i].Enabled = true;
+                        koltuklar[i].BackColor = Color.White;
+                    }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -317,8 +377,6 @@ namespace Otobus_Biletleme_Sistemi
         decimal ikinci_koltuk_secimi = 0;
         private void button36_Click(object sender, EventArgs e)
         {
-            
-            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + path_to_db + @";Integrated Security=True");
 
             string koltuk_check = "SELECT COUNT(*) FROM Yolcu WHERE (Koltuk_No = @koltuk AND Sefer_No = @sefer)";
             con.Open();
@@ -327,13 +385,14 @@ namespace Otobus_Biletleme_Sistemi
                 using (SqlCommand cmd = new SqlCommand(koltuk_check, con))
                 {
                     cmd.Parameters.Add("@koltuk", SqlDbType.NVarChar).Value = numericUpDown1.Value;
-                    cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = sefer_no;
+                    cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = sefer_no.Replace(" ","");
 
                     int koltuk_dolu = (int)cmd.ExecuteScalar();
 
                     if (koltuk_dolu > 0)
                     {
                         MessageBox.Show("Gidiş yolculuğunda seçtiğiniz koltuk doludur!\nLütfen başka bir koltuk seçiniz.");
+                        con.Close();
                         return;
                     }
                 }
@@ -341,22 +400,33 @@ namespace Otobus_Biletleme_Sistemi
             catch (SqlException)
             {
                 MessageBox.Show("İlk koltuk seçiminde SQL Exception Hatası!");
+                con.Close();
                 return;
             }
 
+            con.Close();
             ilk_koltuk = numericUpDown1.Value;
             if (ikinciSeferSecimi == 1) { ikinci_koltuk_secimi = 1; }
             last_button.BackColor= Color.Orange;
             last_button = null;
             button36.BackColor = Color.Orange;
+            button36.Enabled = false;
+            numericUpDown1.Enabled = false;
+            numericUpDown2.Enabled = true;
+            button37.Enabled = true;
+            label32.Text = "DÖNÜŞ";
+            label34.Text = numericUpDown1.Value.ToString();
+            if (ikinciSeferSecimi==1)
+            {
+                clearSeats();
+                checkSeats(sefer_no2);
+            }
+
         }
 
         private void button37_Click(object sender, EventArgs e)
         {
-            
-
-            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + path_to_db + ";Integrated Security=True");
-
+          
             string koltuk_check = "SELECT COUNT(*) FROM Yolcu WHERE (Koltuk_No = @koltuk AND Sefer_No = @sefer)";
             con.Open();
             try
@@ -371,6 +441,7 @@ namespace Otobus_Biletleme_Sistemi
                     if (koltuk_dolu2 > 0)
                     {
                         MessageBox.Show("Dönüş yolculuğunda seçtiğiniz koltuk doludur!\nLütfen başka bir koltuk seçiniz.");
+                        con.Close();
                         return;
                     }
                 }
@@ -378,12 +449,17 @@ namespace Otobus_Biletleme_Sistemi
             catch (SqlException)
             {
                 MessageBox.Show("İkinci koltuk seçiminde SQL Exception Hatası!");
+                con.Close();
                 return;
             }
 
-
+            con.Close();
             ikinci_koltuk = numericUpDown2.Value;
             button37.BackColor = Color.Green;
+            numericUpDown2.Enabled = false;
+            label36.Text = numericUpDown2.Value.ToString();
+            panel13.Visible = true;
+            button37.Enabled = false;
         }
         private void numericUpDown1_Click(object sender, EventArgs e)
         {
@@ -411,6 +487,20 @@ namespace Otobus_Biletleme_Sistemi
             plakalar.Add("TUNCELİ", "62");
 
             return plakalar;
+        }
+
+        private void button40_Click(object sender, EventArgs e)
+        {
+            clearSeats();
+            checkSeats(sefer_no);
+            button36.Enabled = true;
+            numericUpDown1.Enabled = true;
+            numericUpDown2.Enabled = false;
+            button37.Enabled = false;
+            panel13.Visible = false;
+            button36.BackColor = Color.White;
+            button37.BackColor = Color.White;
+            label32.Text = "GİDİŞ";
         }
     }
 

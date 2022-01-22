@@ -81,7 +81,7 @@ namespace Otobus_Biletleme_Sistemi
         private void button1_Click(object sender, EventArgs e)
         {
             con.Open();
-            cmd = new SqlCommand("IF NOT EXISTS (SELECT * FROM Yolcu WHERE Bilet_No = @bilet) BEGIN INSERT INTO Yolcu VALUES (@isim,@soyisim,@tc,@eposta,@koltuk,@sefer,@bilet) END", con);
+            cmd = new SqlCommand("INSERT INTO Yolcu VALUES (@isim,@soyisim,@tc,@eposta,@koltuk,@sefer,@bilet)", con);
 
             try
             {
@@ -104,7 +104,7 @@ namespace Otobus_Biletleme_Sistemi
             }
             catch (SqlException)
             {
-                MessageBox.Show("Eklemede hata oluştu!");
+                MessageBox.Show("Eklemede hata oluştu! Aynı bilet numarası eklenmeye çalışıyor olabilir, lütfen kontrol ediniz.");
                 con.Close();
             }
         }
@@ -166,7 +166,7 @@ namespace Otobus_Biletleme_Sistemi
         private void button6_Click(object sender, EventArgs e)
         {
             con.Open();
-            cmd = new SqlCommand("IF NOT EXISTS (SELECT * FROM Sefer WHERE Sefer_No = @sefer) BEGIN INSERT INTO Sefer VALUES (@nereden,@nereye,@tarih,@saat,@ucret,@sefer) END", con);
+            cmd = new SqlCommand("INSERT INTO Sefer VALUES (@nereden,@nereye,@tarih,@saat,@ucret,@sefer)", con);
 
             try
             {
@@ -187,7 +187,7 @@ namespace Otobus_Biletleme_Sistemi
             }
             catch (SqlException) 
             {
-                MessageBox.Show("Eklemede hata oluştu!");
+                MessageBox.Show("Eklemede hata oluştu! Aynı bilet numarası eklenmeye çalışıyor olabilir, lütfen kontrol ediniz.");
                 con.Close();
             }
 

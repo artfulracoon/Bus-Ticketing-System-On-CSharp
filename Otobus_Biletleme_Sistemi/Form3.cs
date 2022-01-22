@@ -153,7 +153,7 @@ namespace Otobus_Biletleme_Sistemi
                             textBox7.Text = data2[3];
                             textBox8.Text = data2[4];
                             label11.Text = data2[5];
-                            label12.Text = data2[6];
+                            label13.Text = data2[6];
 
                             reader2.Close();
                         }

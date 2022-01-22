@@ -46,7 +46,7 @@ namespace Otobus_Biletleme_Sistemi
                 label21.Text = "Sefer No: " + donus.Sefer_no;
 
                 label23.Text = "Koltuk No: " + yolcu2.Koltuk_no.ToString();
-                label24.Text = "Koltuk No: " + yolcu2.Bilet_no;
+                label24.Text = "Bilet No: " + yolcu2.Bilet_no;
 
                 label15.Show();
                 label16.Show();

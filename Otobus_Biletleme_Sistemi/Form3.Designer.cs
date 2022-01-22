@@ -111,9 +111,9 @@
             this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.label5);
-            this.panel2.Location = new System.Drawing.Point(447, 237);
+            this.panel2.Location = new System.Drawing.Point(430, 237);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(582, 512);
+            this.panel2.Size = new System.Drawing.Size(599, 512);
             this.panel2.TabIndex = 13;
             this.panel2.Visible = false;
             // 
@@ -122,7 +122,7 @@
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label15.Location = new System.Drawing.Point(249, 425);
+            this.label15.Location = new System.Drawing.Point(225, 425);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(61, 25);
             this.label15.TabIndex = 17;
@@ -133,7 +133,7 @@
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label14.Location = new System.Drawing.Point(24, 462);
+            this.label14.Location = new System.Drawing.Point(3, 466);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(546, 25);
             this.label14.TabIndex = 16;
@@ -452,8 +452,10 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1063, 803);
             this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form3";
-            this.Text = "EGE OTOBÜS SİSTEMİ";
+            this.Text = "EGE OTOBÜS BİLET REZERVASYON SİSTEMİ";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form3_FormClosed);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
