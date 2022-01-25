@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace Otobus_Biletleme_Sistemi
 {
+    
     public partial class Form1 : Form
     {
         int gidisDonus = 0;
@@ -19,48 +20,19 @@ namespace Otobus_Biletleme_Sistemi
         string sefer_no;
         string sefer_no2;
         SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + (Application.StartupPath.Substring(0, Application.StartupPath.Length - 9) + @"Database1.mdf") + @";Integrated Security=True");
+        Button last_button = null;
+        string secili_koltuk_no = null;
+        decimal ikinci_koltuk_secimi = 0;
+
         public Form1()
         {
-            
+
             InitializeComponent();
             panel1.BringToFront();
             panel3.BackColor = Color.FromArgb(41, 41, 61);
             panel6.Visible = false;
             panel12.Visible = false;
 
-        }
-
-        private void radioButton1_Click(object sender, EventArgs e)
-        {
-            gidisDonus = 0;
-            monthCalendar2.Hide();
-            label2.Hide();
-        }
-
-        private void radioButton2_Click(object sender, EventArgs e)
-        {
-            gidisDonus = 1;
-            monthCalendar2.Show();
-            label2.Show();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-            if (gidisDonus == 1)
-            {
-                donus = new Yolculuk(comboBox2.GetItemText(comboBox2.SelectedItem),
-                    comboBox1.GetItemText(comboBox1.SelectedItem),
-                monthCalendar2.SelectionRange.Start.ToString());
-   
-
-            }
-
-            yolculuk = new Yolculuk(comboBox1.GetItemText(comboBox1.SelectedItem),
-                comboBox2.GetItemText(comboBox2.SelectedItem),
-                monthCalendar1.SelectionRange.Start.ToString());
-
-            showPart2(yolculuk);
         }
 
         private void showPart2(Yolculuk yolculuk)
@@ -92,7 +64,7 @@ namespace Otobus_Biletleme_Sistemi
 
         private void showPart3()
         {
-            if (gidisDonus == 1) 
+            if (gidisDonus == 1)
             {
                 showPart2(donus);
                 gidisDonus = 0;
@@ -114,8 +86,8 @@ namespace Otobus_Biletleme_Sistemi
                    yolculuk.Gidis_tarihi.Replace("/", "");
 
             if (ikinciSeferSecimi == 1)
-                sefer_no2 = (string)plaka[donus.Nereden] + (string)plaka[donus.Nereye] + donus.Saat.Substring(0, 2) + donus.Saat.Substring(3, 2) +
-                   donus.Gidis_tarihi.Substring(0, 2) + donus.Gidis_tarihi.Substring(3, 2) + donus.Gidis_tarihi.Substring(8, 2);
+                sefer_no2 = (string)plaka[donus.Nereden] + (string)plaka[donus.Nereye] + donus.Saat.Replace(":", "") +
+                   donus.Gidis_tarihi.Replace("/", "");
 
             checkSeats(sefer_no);
             panel6.Visible = false;
@@ -170,16 +142,89 @@ namespace Otobus_Biletleme_Sistemi
 
         private void clearSeats()
         {
-                    Button[] koltuklar = { button8, button9, button10, button11, button12, button13, button14, button15, button16,
+            Button[] koltuklar = { button8, button9, button10, button11, button12, button13, button14, button15, button16,
                         button17, button18, button19,button20, button21, button22, button23, button24, button25, button26, button27, button28,
                         button29, button30, button31, button32, button33, button34, button35, button38, button39, button42, button43 };
 
 
-                    for (int i = 0; i < koltuklar.Length; i++)
-                    {
-                        koltuklar[i].Enabled = true;
-                        koltuklar[i].BackColor = Color.White;
-                    }
+            for (int i = 0; i < koltuklar.Length; i++)
+            {
+                koltuklar[i].Enabled = true;
+                koltuklar[i].BackColor = Color.White;
+            }
+        }
+
+        private void koltuk_sec(object sender, EventArgs e)
+        {
+            Button buton = (Button)sender;
+            if (last_button == null) { }
+            else { last_button.BackColor = Color.White; }
+
+            last_button = buton;
+            secili_koltuk_no = buton.Text;
+            if (ikinci_koltuk_secimi == 0)
+            {
+                numericUpDown1.Value = Int32.Parse(secili_koltuk_no);
+                buton.BackColor = Color.Orange;
+            }
+
+            else
+            {
+                numericUpDown2.Value = Int32.Parse(secili_koltuk_no);
+                buton.BackColor = Color.Green;
+            }
+
+        }
+
+        Hashtable PlakaOlusturucu()
+        {
+            Hashtable plakalar = new Hashtable();
+            plakalar.Add("ADANA", "01");
+            plakalar.Add("ANKARA", "06");
+            plakalar.Add("BURSA", "16");
+            plakalar.Add("ÇANAKKALE", "17");
+            plakalar.Add("DİYARBAKIR", "21");
+            plakalar.Add("İSTANBUL", "34");
+            plakalar.Add("İZMİR", "35");
+            plakalar.Add("KOCAELİ", "41");
+            plakalar.Add("MUŞ", "49");
+            plakalar.Add("TRABZON", "61");
+            plakalar.Add("TUNCELİ", "62");
+
+            return plakalar;
+        }
+
+        private void radioButton1_Click(object sender, EventArgs e)
+        {
+            gidisDonus = 0;
+            monthCalendar2.Hide();
+            label2.Hide();
+        }
+
+        private void radioButton2_Click(object sender, EventArgs e)
+        {
+            gidisDonus = 1;
+            monthCalendar2.Show();
+            label2.Show();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            if (gidisDonus == 1)
+            {
+                donus = new Yolculuk(comboBox2.GetItemText(comboBox2.SelectedItem),
+                    comboBox1.GetItemText(comboBox1.SelectedItem),
+                monthCalendar2.SelectionRange.Start.ToString());
+
+
+            }
+
+            yolculuk = new Yolculuk(comboBox1.GetItemText(comboBox1.SelectedItem),
+                comboBox2.GetItemText(comboBox2.SelectedItem),
+                monthCalendar1.SelectionRange.Start.ToString());
+
+            showPart2(yolculuk);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -254,7 +299,7 @@ namespace Otobus_Biletleme_Sistemi
                 yolculuk.Saat = label21.Text;
                 yolculuk.Ucret = label22.Text;
             }
-            else 
+            else
             {
                 donus.Saat = label21.Text;
                 donus.Ucret = label22.Text;
@@ -316,14 +361,14 @@ namespace Otobus_Biletleme_Sistemi
         private void button7_Click(object sender, EventArgs e)
         {
 
-            if (textBox1.Text == "" || textBox2.Text == "" || textBox3.Text == "" || textBox4.Text == "") 
+            if (textBox1.Text == "" || textBox2.Text == "" || textBox3.Text == "" || textBox4.Text == "")
             {
                 MessageBox.Show("Verilen Alanlar Boş Geçilemez!");
                 return;
             }
 
             yolcu = new Yolcu(textBox1.Text, textBox2.Text, textBox3.Text, textBox4.Text, numericUpDown1.Value);
-            
+
             yolcu.Sefer_no = sefer_no;
             yolculuk.Sefer_no = sefer_no;
 
@@ -340,35 +385,8 @@ namespace Otobus_Biletleme_Sistemi
             var form2 = new Form2(yolcu, yolculuk, donus, yolcu2);
             form2.Closed += (s, args) => this.Close();
             form2.Show();
-            
-        }
-        Button last_button = null;
-        string secili_koltuk_no = null;
-        private void koltuk_sec(object sender, EventArgs e)
-        {
-            Button buton = (Button)sender;
-            if (last_button == null) { }
-            else { last_button.BackColor = Color.White; }
-            
-            last_button = buton;
-            secili_koltuk_no = buton.Text;
-            if (ikinci_koltuk_secimi == 0)
-            {
-                numericUpDown1.Value = Int32.Parse(secili_koltuk_no);
-                buton.BackColor = Color.Orange;
-            }
 
-            else 
-            { 
-                numericUpDown2.Value = Int32.Parse(secili_koltuk_no);
-                buton.BackColor = Color.Green;
-            }
-                
         }
-
-        decimal ilk_koltuk = 0;
-        decimal ikinci_koltuk = 0;
-        decimal ikinci_koltuk_secimi = 0;
         private void button36_Click(object sender, EventArgs e)
         {
 
@@ -379,7 +397,7 @@ namespace Otobus_Biletleme_Sistemi
                 using (SqlCommand cmd = new SqlCommand(koltuk_check, con))
                 {
                     cmd.Parameters.Add("@koltuk", SqlDbType.NVarChar).Value = numericUpDown1.Value;
-                    cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = sefer_no.Replace(" ","");
+                    cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = sefer_no.Replace(" ", "");
 
                     int koltuk_dolu = (int)cmd.ExecuteScalar();
 
@@ -399,13 +417,12 @@ namespace Otobus_Biletleme_Sistemi
             }
 
             con.Close();
-            ilk_koltuk = numericUpDown1.Value;
             if (ikinciSeferSecimi == 1) { ikinci_koltuk_secimi = 1; }
-            last_button.BackColor= Color.Orange;
+            last_button.BackColor = Color.Orange;
             last_button = null;
             button36.BackColor = Color.Orange;
 
-            if (ikinciSeferSecimi==1)
+            if (ikinciSeferSecimi == 1)
             {
                 button36.Enabled = false;
                 numericUpDown1.Enabled = false;
@@ -421,7 +438,7 @@ namespace Otobus_Biletleme_Sistemi
 
         private void button37_Click(object sender, EventArgs e)
         {
-          
+
             string koltuk_check = "SELECT COUNT(*) FROM Yolcu WHERE (Koltuk_No = @koltuk AND Sefer_No = @sefer)";
             con.Open();
             try
@@ -449,7 +466,6 @@ namespace Otobus_Biletleme_Sistemi
             }
 
             con.Close();
-            ikinci_koltuk = numericUpDown2.Value;
             button37.BackColor = Color.Green;
             numericUpDown2.Enabled = false;
             label36.Text = numericUpDown2.Value.ToString();
@@ -464,24 +480,6 @@ namespace Otobus_Biletleme_Sistemi
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
             last_button.BackColor = Color.White;
-        }
-
-        Hashtable PlakaOlusturucu()
-        {
-            Hashtable plakalar = new Hashtable();
-            plakalar.Add("ADANA", "01");
-            plakalar.Add("ANKARA", "06");
-            plakalar.Add("BURSA", "16");
-            plakalar.Add("ÇANAKKALE", "17");
-            plakalar.Add("DİYARBAKIR", "21");
-            plakalar.Add("İSTANBUL", "34");
-            plakalar.Add("İZMİR", "35");
-            plakalar.Add("KOCAELİ", "41");
-            plakalar.Add("MUŞ", "49");
-            plakalar.Add("TRABZON", "61");
-            plakalar.Add("TUNCELİ", "62");
-
-            return plakalar;
         }
 
         private void button40_Click(object sender, EventArgs e)
@@ -563,6 +561,5 @@ namespace Otobus_Biletleme_Sistemi
         public string Sefer_no { get => sefer_no; set => sefer_no = value; }
     }
 
-
-
 }
+

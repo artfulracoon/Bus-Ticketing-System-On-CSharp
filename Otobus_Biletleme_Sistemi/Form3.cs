@@ -9,7 +9,6 @@ namespace Otobus_Biletleme_Sistemi
 {
     public partial class Form3 : Form
     {
-
         System.Drawing.Point point = new System.Drawing.Point(521, 34);
         SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + (Application.StartupPath.Substring(0,Application.StartupPath.Length - 9) + @"Database1.mdf") + @";Integrated Security=True");
         public Form3()
@@ -69,17 +68,18 @@ namespace Otobus_Biletleme_Sistemi
         private void button4_Click(object sender, EventArgs e)
         {
 
-            string bilet_no;
+            string bilet_no = textBox1.Text;
+            string sefer_no;
             con.Open();
             string bilet_no_sorgu = "SELECT Sefer_No FROM Yolcu WHERE Bilet_No = @bilet_no";
             try
             {
                 using (SqlCommand cmd = new SqlCommand(bilet_no_sorgu, con))
                 {
-                    cmd.Parameters.Add("@bilet_no", SqlDbType.NVarChar).Value = textBox1.Text;
+                    cmd.Parameters.Add("@bilet_no", SqlDbType.NVarChar).Value = bilet_no;
                     SqlDataReader reader = cmd.ExecuteReader();
                     reader.Read();
-                    bilet_no = reader.GetString(0);
+                    sefer_no = reader.GetString(0);
 
                     reader.Close();
                 }
@@ -97,7 +97,7 @@ namespace Otobus_Biletleme_Sistemi
                 
                 using (SqlCommand cmd = new SqlCommand(yolculuk_veri_sorgu, con))
                 {
-                    cmd.Parameters.Add("@sefer_no", SqlDbType.NVarChar).Value = bilet_no;
+                    cmd.Parameters.Add("@sefer_no", SqlDbType.NVarChar).Value = sefer_no;
 
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -127,9 +127,10 @@ namespace Otobus_Biletleme_Sistemi
 
                     if (result == DialogResult.Yes)
                         {
-                        using (SqlCommand cmd2 = new SqlCommand("SELECT * FROM Yolcu WHERE Sefer_No = @sefer_no", con))
+                        using (SqlCommand cmd2 = new SqlCommand("SELECT * FROM Yolcu WHERE Sefer_No = @sefer_no AND Bilet_No = @bilet", con))
                         {
-                            cmd2.Parameters.Add("@sefer_no", SqlDbType.NVarChar).Value = bilet_no;
+                            cmd2.Parameters.Add("@sefer_no", SqlDbType.NVarChar).Value = sefer_no;
+                            cmd2.Parameters.Add("@bilet", SqlDbType.NVarChar).Value = bilet_no;
                             SqlDataReader reader2 = cmd2.ExecuteReader();
 
                             string[] data2 = new string[7];
@@ -204,7 +205,10 @@ namespace Otobus_Biletleme_Sistemi
         private void button6_Click(object sender, EventArgs e)
         {
             con.Open();
-            SqlCommand cmd = new SqlCommand("UPDATE Yolcu SET Isim=@isim,Soyisim=@soyisim,TC_Kimlik=@tc,Eposta=@eposta,Koltuk_No=@koltuk,Sefer_No=@sefer WHERE Bilet_No=@bilet", con);
+            SqlCommand cmd;
+
+     
+            cmd = new SqlCommand("UPDATE Yolcu SET Isim=@isim,Soyisim=@soyisim,TC_Kimlik=@tc,Eposta=@eposta,Koltuk_No=@koltuk,Sefer_No=@sefer WHERE Bilet_No=@bilet", con);
 
             try
             {
@@ -216,7 +220,7 @@ namespace Otobus_Biletleme_Sistemi
                     cmd.Parameters.Add("@eposta", SqlDbType.NVarChar).Value = textBox7.Text.Replace(" ", "");
                     cmd.Parameters.Add("@koltuk", SqlDbType.NVarChar).Value = textBox8.Text.Replace(" ", "");
                     cmd.Parameters.Add("@sefer", SqlDbType.NVarChar).Value = label11.Text.Replace(" ", "");
-                    cmd.Parameters.Add("@bilet", SqlDbType.NVarChar).Value = textBox1.Text;
+                    cmd.Parameters.Add("@bilet", SqlDbType.NVarChar).Value = label13.Text.Replace(" ", "");
 
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Yolcu verileri başarıyla değiştirildi!");
@@ -226,7 +230,7 @@ namespace Otobus_Biletleme_Sistemi
             }
             catch (SqlException)
             {
-                MessageBox.Show("Değiştirilme sırasında hata oluştu!");
+                MessageBox.Show("Değiştirilme sırasında hata oluştu! Aynı yolcuyu eklemeye çalışıyor olabilirsiniz veya seçili seferdeki koltuk numarası dolu olabilir.");
                 con.Close();
             }
         }
@@ -252,11 +256,6 @@ namespace Otobus_Biletleme_Sistemi
                 MessageBox.Show("Silinmede hata oluştu!");
                 con.Close();
             }
-        }
-
-        private void Form3_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            
         }
     }
 }

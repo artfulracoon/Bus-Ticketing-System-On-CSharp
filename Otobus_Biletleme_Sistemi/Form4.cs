@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -190,11 +184,7 @@ namespace Otobus_Biletleme_Sistemi
                 MessageBox.Show("Eklemede hata oluştu! Aynı bilet numarası eklenmeye çalışıyor olabilir, lütfen kontrol ediniz.");
                 con.Close();
             }
-
-
-
-
-}
+        }
 
         private void button5_Click(object sender, EventArgs e)
         {
