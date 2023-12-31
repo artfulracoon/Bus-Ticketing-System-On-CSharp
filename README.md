@@ -1,3 +1,8 @@
+TLDR;
+Written on C# and designed with Visual Studio, this app lets users reserve individual bus seats, selecting from different voyages and cities. 
+This project uses SQL as a database for said data, and has a build in admin panel.
+
+
 The Bus Ticketing System is a bus ticket reservation system coded in C# and developed using Visual Studio. This system aims to provide an easy way for end-users to reserve bus tickets. Users can reserve a seat on a bus route by specifying their preferences through the user interface. All data, along with the information provided during the reservation, is stored in a database to ensure reservation persistence.
 
 The objectives of the project are:
